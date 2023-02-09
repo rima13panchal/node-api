@@ -1,15 +1,22 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const path = require("path");
 
 const app = express();
-
 app.use(cors());
 app.use(express.json());
 
-app.use("/home", (req, res) => {
+app.use(express.static(path.join(__dirname, "/frontend/build")));
+//app.use(express.static(path.join(__dirname, "../frontend/build")));
+
+app.get("/", function (req, res) {
+  res.sendFile(path.join(__dirname, "/frontend/build", "index.html"));
+});
+
+app.use("/name", (req, res) => {
   res.json({
-    msg: "Hi Im from express app-- after github ci cd pipeline",
+    msg: "Express App",
   });
 });
 
@@ -29,7 +36,7 @@ mongoose
     "mongodb+srv://rimap:H3Is2J8c82i8ZEaU@cluster0.mqxsxqj.mongodb.net/crud-app?retryWrites=true&w=majority"
   )
   .then(() => {
-    console.log("database connected");
+    console.log(path.join(__dirname, "/frontend/build"));
     app.listen(PORT, () => console.log(`server is running on port ${PORT}`));
   })
   .catch((err) => {
